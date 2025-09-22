@@ -1,0 +1,48 @@
+=============================
+       Ferrater API Notes
+=============================
+
+1️⃣ Ejecutar el proyecto en desarrollo (sin empaquetar):
+--------------------------------------------------------
+Usa Maven para correr directamente la app:
+
+# Con Maven instalado globalmente
+mvn spring-boot:run
+
+# Con Maven Wrapper incluido en el proyecto
+.\mvnw spring-boot:run
+
+---
+
+2️⃣ Generar el archivo JAR del proyecto:
+----------------------------------------
+# Limpiar compilaciones anteriores y generar el jar
+# Omitiendo tests
+.\mvnw clean package -DskipTests
+
+# Alternativa con Maven global
+mvn clean package -DskipTests
+
+# El jar se generará en:
+target\ferrater-api-0.0.1-SNAPSHOT.jar
+
+---
+
+3️⃣ Ejecutar el JAR generado:
+-----------------------------
+java -jar .\target\ferrater-api-0.0.1-SNAPSHOT.jar
+
+> Nota: Asegúrate de haber generado el JAR previamente con `mvn package` o `mvnw package`.
+
+---
+
+4️⃣ Crear un archivo TAR para Docker:
+-------------------------------------
+# Sitúate en la carpeta donde tienes:
+# - Dockerfile
+# - El JAR generado (por ejemplo target\ferrater-api-0.0.1-SNAPSHOT.jar)
+
+# Comando para crear un TAR del contexto de Docker
+tar -cvf ferrater-api.tar Dockerfile target/ferrater-api-0.0.1-SNAPSHOT.jar
+
+> Este TAR lo puedes usar para importar la imagen o subirlo donde necesites.
