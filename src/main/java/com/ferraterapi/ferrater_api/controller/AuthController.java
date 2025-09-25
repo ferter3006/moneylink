@@ -51,18 +51,23 @@ public class AuthController {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        // Si camvpos vacios retornar status 0 con error
+        // Si campos vacios retornar status 0 con error
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             return ResponseEntity
-                    .ok(new ApiResponse<>(0, "AuthController.java", "Email y password no pueden ser vacíos", null));
+                    .ok(new ApiResponse<>(0, "AuthController.java", "email y password no pueden ser vacíos", null));
         }
 
         // Busco el usuario en la base
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
-        // Si el usuario no existe o la password no coincide
-        if (usuarioOpt.isEmpty() || !BCrypt.checkpw(password, usuarioOpt.get().getPasswordHash())) {
-            return ResponseEntity.ok(new ApiResponse<>(0, "AuthController.java", "Credenciales incorrectas", null));
+        // Comprobamos Si el usuario no existe...
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse<>(0, "AuthController.java", "Email no registrado", null));
+        }
+
+        // Comprobamos si la password es correcta...
+        if (!BCrypt.checkpw(password, usuarioOpt.get().getPasswordHash())) {
+            return ResponseEntity.ok(new ApiResponse<>(0, "AuthController.java", "Contraseña incorrecta", null));
         }
 
         System.err.println("antes de " + usuarioOpt.get().getEmail());
@@ -77,7 +82,6 @@ public class AuthController {
 
         // Preparamos la respuesta
         message = "Credenciales correctas";
-        data.put("password", password);
         data.put("username", email);
         data.put("token", token);
 

@@ -40,14 +40,14 @@ public class AuthService {
         return usuarioService.registrarUsuario(nombre, email, password);
     }
 
-    // Generar una nueva api key para un usuario
+    // Generar una nueva api key para un usuario (Login)
     public String generateApiKey(Long userId) {
         Usuario user = UsuarioRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         String apiKeyValue = UUID.randomUUID().toString();
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expiration = now.plusDays(30); // Ejemplo: caduca en 30 días
+        LocalDateTime expiration = now.plusMinutes(1); // Caduca en 1 minuto (para probar que realmente caduca xd)
 
         ApiKey apiKey = new ApiKey(
                 apiKeyValue,
